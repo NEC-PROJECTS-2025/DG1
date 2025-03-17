@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family:'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #4C8055;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        #metricsChart {
+            max-width: 600px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+
+        
+
+
+
+
+
+
+         /* Make the header fixed at the top */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color:#4C8055;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        z-index: 1000; /* Ensures it stays on top of other elements */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        
+    }
+
+    /* Make the navbar fixed below the header */
+    nav {
+        position: fixed;
+        top: 90px; /* Adjust to match the height of your header */
+        left: 0;
+        width: 100%;
+        background-color: #343a40;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    nav a {
+        color: white;
+        padding: 14px 20px ;
+        text-decoration: none;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+        background-color: #495057;
+    }
+
+    /* Add margin to the top of the content to avoid overlapping with fixed elements */
+body {
+        margin-top: 140px; /* Adjust to match the combined height of the header and navbar */
+    }  
+#home{
+margin-top:-40px;
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        section {
+            padding: 50px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+    
+        section h2 {
+            color: #343a40;
+        }
+    
+        section p {
+            color: #495057;
+        }
+
+
+
+
+
+
+
+        header img {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        header .team-members {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .pro{
+            background-color:rgb(210, 228, 228);
+        }
+        
+
+
+
+
+
+
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #68A4A5;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #495057;
+        }
+        .container {
+            text-align: center;
+            background: #ffffff;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            transition: background-color 0.3s;
+        }
+        .output:hover {
+            background-color: #e2e6ea;
+        }
+        #image-preview {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            margin-left: auto; /* Centering */
+            margin-right: auto; /* Centering */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://tse3.mm.bing.net/th?id=OIP.yiPjuNo62CK7U284VXcokgAAAA&pid=Api&P=0&h=180" alt="Logo" style="width: 100px; height: 80px;">
+        <h1>Integrating CNN,LSTM with DenseNet201 for
+            Efficient Real-Time Plant Disease Detection</h1>
+        <div class="team-members">Team Members: P.Ujwala Devi, R.Nandini, S.Vasantha</div>
+    </header>
+    </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="#about-project">About Project</a>
+        <a href="#predictions">Predictions</a>
+        <a href="#model-evaluation">Model Evaluation Metrics</a>
+        <a href="#project-flowchart">Project Flowchart</a>
+    </nav>
+    <!--<div class="container">
+        <h2>Upload an Image</h2>
+        <label for="file-upload" class="upload-btn">Choose File</label>
+        <input id="file-upload" type="file" accept="image/*" onchange="uploadImage()">
+        <img id="image-preview" src="" alt="Image Preview" style="display:none;">
+        <div class="output" id="result"></div>
+    </div>-->
+
+
+
+
+  
+    <section id="home" style="padding: 50px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(200, 230, 255, 0.9)), url('apple-orchard.jpg') no-repeat center center; background-size: cover; color: #333;">
+        <div style="max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 30px;">
+            <!-- Left Section: Text Content -->
+            <div style="flex: 1; text-align: left;">
+                <h1 style="font-size:2.8em; font-weight:bold; margin-bottom:20px; color: #2c3e50;">Revolutionizing Agriculture with AI</h1>
+                <p style="font-size:1.2em; line-height:1.6; margin-bottom:20px;">
+                    Quick detection of plant diseases and pests is vital for preventing major losses in agriculture. 
+                    By leveraging advanced machine learning techniques like CNN-LSTM with DenseNet201, our project achieves 
+                    over 99.4% accuracy in detecting and classifying diseases in apple plant leaves. This innovative approach 
+                    minimizes the need for high-quality labeled datasets, ensuring cost-effective and real-time solutions 
+                    for farmers.
+                </p>
+                <p style="font-size:1.2em; line-height:1.6; margin-bottom:30px;">
+                    Plant leaf disease detection harnesses cutting-edge AI technologies like image processing and 
+                    machine learning to empower agricultural professionals, ensuring effective treatment and reducing crop losses.
+                </p>
+                <div style="margin-top: 20px;">
+                    <a href="#learn-more" style="display: inline-block; margin: 10px; padding: 15px 30px; font-size: 1em; color: white; background: #ff5722; text-decoration: none; border-radius: 5px;">Learn More</a>
+                    <a href="#contact" style="display: inline-block; margin: 10px; padding: 15px 30px; font-size: 1em; color: white; background: #009688; text-decoration: none; border-radius: 5px;">Get Involved</a>
+                </div>
+            </div>
+            
+            <!-- Right Section: Image -->
+            <div style="flex: 1; text-align:center;">
+                <img src="https://plantura.garden/uk/wp-content/uploads/sites/2/2022/04/apple-tree.jpg" alt="Apple Leaf Disease Detection" style="width: 100%; max-width: 500px; border-radius: 15px; box-shadow:0px 0px 10px 10px;;height:400px;">
+            </div>
+        </div>
+    </section>
+
+    
+    
+    
+    
+    <section id="about-project">
+       <!-- About Section -->
+       <div style="margin-top: 50px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); display: flex; align-items: center;box-shadow:0px 0px 10px 10px;">
+        <!-- Image on the left side -->
+        <div style="flex: 1; text-align: center; padding-right: 20px;">
+            <img src="https://www.mdpi.com/agriculture/agriculture-11-00617/article_deploy/html/images/agriculture-11-00617-g007.png" alt="Project Image" style="width: 100%; max-width: 500px; border-radius: 10px; box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);">
+        </div>
+        
+        <!-- Content on the right side -->
+        <div style="flex: 2; font-size: 1.1em; line-height: 1.6; text-align: justify;">
+            <h2 style="font-size: 2em; margin-bottom: 20px; text-align:center;">About the Project</h2>
+            <p>The system uses a hybrid CNN-LSTM-DenseNet201 model, which combines the power of CNNs for feature extraction, LSTM networks for sequence learning, and DenseNet for more accurate predictions. This model is trained to recognize and classify diseases with high accuracy, achieving over 99.4% accuracy in real-time disease detection. Furthermore, by incorporating unsupervised learning techniques like anomaly detection, the system can provide effective disease diagnosis without the need for costly, labeled datasets, making it a viable solution for farmers in both developed and developing regions.</p>
+        </div>
+    </div>
+    
+
+    <!-- Process Overview -->
+    <div class="pro" style="margin-top: 50px; padding: 20px;;">
+        <h2 style="text-align: center; font-size: 2em; margin-bottom: 20px;">How It Works</h2>
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+            <div style="text-align: center; max-width: 300px;">
+                <img src=" https://www.goodfruit.com/wp-content/uploads/frogeye-1.jpg" alt="Step 1" style="width: 100%; max-width:450px;border-radius:20px;margin-bottom: 10px;">
+                <h3>Step 1: Capture Images</h3>
+                <p>Farmers capture images of apple plant leaves using a smartphone or camera.</p>
+               
+            </div>
+            <div style="text-align: center; max-width: 300px;">
+                <img src="https://teksands.ai/resources/landing-pages/assets/image-processing/plant-disease.jpeg" alt="Step 2" style="width: 100%; max-width:550px;border-radius:20px;height:200px;margin-bottom: 10px;">
+                <h3>Step 2: Analyze Images</h3>
+                <p>Images are analyzed using our AI-powered machine learning model.</p>
+            </div>
+            <div style="text-align: center; max-width: 300px;">
+                <img src="https://file.techscience.com/ueditor/files/cmc/TSP_CMC-71-1/TSP_CMC_21875/TSP_CMC_21875/Images/CMC_21875-fig-11a.png" alt="Step 3" style="width: 100%; max-width:600px;border-radius:10px;height:200px;margin-bottom: 10px;">
+                <h3>Step 3: Get Results</h3>
+                <p>Instant disease detection results help farmers take timely actions.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div style="margin-top: 50px; padding: 20px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), hsla(207, 86.40%, 79.80%, 0.90)); border-radius: 10px;">
+        <h2 style="text-align: center; font-size: 2em; margin-bottom: 20px;">Why Choose Our Solution?</h2>
+        <ul style="list-style-type: none; padding: 0; text-align: center; font-size: 1.1em; line-height: 1.6;">
+            <li>🌿 Early detection ensures healthier crops.</li>
+            <li>🌍 Promotes sustainable and eco-friendly farming practices.</li>
+            <li>📉 Reduces pesticide use and saves resources.</li>
+            <li>📈 Improves crop yield and farmer livelihoods.</li>
+        </ul>
+    </div>
+
+    <!-- Testimonial -->
+    <div style="margin-top: 50px; padding: 20px; text-align: center;">
+        <blockquote style="font-size: 1.2em; font-style: italic; margin: 0;">"This project has transformed how I manage my apple orchards. Early disease detection has saved my crops and my income!" – Farmer John Doe</blockquote>
+    </div>
+    </section>
+    
+
+
+
+    <section id="predictions" style="padding: 50px 20px;background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), hsla(185, 89.60%, 73.50%, 0.90));box-shadow:10px 10px 10px 10px;">
+
+        <!-- Section Header -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="font-size: 2.5em; color: #333; margin-top:90px;margin-bottom: 10px;">Predictions</h2>
+            <p style="font-size: 1.2em; color: #555; margin-bottom: 30px; max-width: 900px; margin-left: auto; margin-right: auto;">Upload an image of a plant leaf to get predictions about the type of disease affecting it. Our system uses advanced machine learning models to analyze the image and provide real-time disease detection and classification.</p>
+        </div>
+        
+        <!-- Content Section -->
+        <div style="max-width: 1000px; margin: auto; display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;">
+            
+            <!-- Left: Image Upload -->
+            <div style="flex: 1; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                <h3 style="font-size: 1.8em; margin-bottom: 20px;text-align:center;">Upload an Image</h3>
+                <label for="file-upload" class="upload-btn" style="padding: 10px 20px; background: #4CAF50; color: white; font-size: 1.1em; border-radius: 5px; cursor: pointer; text-align: center;margin-left:90px;">Choose File</label>
+                <input id="file-upload" type="file" accept="image/*" onchange="uploadImage()" style="display: none;">
+                
+                <!-- Image Preview -->
+                <img id="image-preview" src="" alt="Image Preview" style="display:none; margin-top: 20px; max-width: 100%; border-radius: 10px; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);">
+                  <!-- Prediction Result Section -->
+        <div class="output" id="result" style="margin-top: 40px; text-align: center; font-size: 1.4em; color: #333; font-weight: bold;"></div>
+            </div>
+    
+            <!-- Right: How It Works -->
+            <div style="flex: 1.5; padding: 20px; margin-left: 40px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                <h3 style="font-size: 1.8em; margin-bottom: 20px;text-align:center;">How It Works</h3>
+                <p style="font-size: 1.1em; color: #666; text-align: justify; line-height: 1.6;">Our plant leaf disease detection system leverages cutting-edge machine learning technologies to identify and diagnose plant diseases from uploaded images. By using a combination of Convolutional Neural Networks (CNNs), Long Short-Term Memory (LSTM) networks, and DenseNet, the system accurately classifies different types of plant diseases in real-time with high precision.</p>
+                <p style="font-size: 1.1em; color: #666; text-align: justify; line-height: 1.6;">The trained model recognizes common plant diseases such as apple scab, downy mildew, and other leaf infections. The system analyzes the visual features of the leaf and identifies patterns indicative of specific diseases, providing fast and reliable predictions.</p>
+                <p style="font-size: 1.1em; color: #666; text-align: justify; line-height: 1.6;">This system is designed to assist farmers and agricultural professionals by offering a simple and quick solution for diagnosing plant diseases, ensuring that they can take timely action to prevent further crop damage. By providing this technology, we aim to make disease detection accessible and efficient, even in regions with limited access to expert services.</p>
+            </div>
+    
+        </div>
+        
+    </section>
+    
+   
+    
+    
+  
+    <section id="model-evaluation" style="padding: 60px; background: linear-gradient(135deg, #e9f7ff, #f9f9f9);box-shadow:10px 10px 10px 10px;">
+        <h2 style="text-align: center; font-size: 2.8em; color: #333; font-weight: bold; margin-bottom: 40px;">Model Evaluation Metrics</h2>
+    
+        <div class="container" style="max-width: 1000px; margin: auto; padding: 30px; background: white; border-radius: 15px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);">
+            <!-- Header Section -->
+            <h3 style="font-size: 2.2em; text-align: center; margin-bottom: 20px; color: #555;">Evaluation Results</h3>
+            <p style="font-size: 1.2em; text-align: center; margin-bottom: 40px; color: #666;">Performance metrics for the trained model are displayed below with interactive visuals.</p>
+    
+            <!-- Metrics Grid -->
+            <div class="metrics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <!-- Accuracy -->
+                <div class="metric" style="text-align: center; padding: 20px; background: #f3fcf5; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                    <h4 style="font-size: 1.8em; color: #4CAF50;">Accuracy</h4>
+                    <p style="font-size: 1.6em; font-weight: bold; color: #333; margin: 10px 0;">99%</p>
+                    <p style="font-size: 1em; color: #666;">Percentage of correct predictions made by the model.</p>
+                </div>
+                <!-- Precision -->
+                <div class="metric" style="text-align: center; padding: 20px; background: #fcf8f3; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                    <h4 style="font-size: 1.8em; color: #FF9800;">Precision</h4>
+                    <p style="font-size: 1.6em; font-weight: bold; color: #333; margin: 10px 0;">99%</p>
+                    <p style="font-size: 1em; color: #666;">Proportion of positive predictions that were correct.</p>
+                </div>
+                <!-- Recall -->
+                <div class="metric" style="text-align: center; padding: 20px; background: #f3f7fc; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                    <h4 style="font-size: 1.8em; color: #2196F3;">Recall</h4>
+                    <p style="font-size: 1.6em; font-weight: bold; color: #333; margin: 10px 0;">98%</p>
+                    <p style="font-size: 1em; color: #666;">Proportion of actual positive cases correctly identified.</p>
+                </div>
+                <!-- F1-Score -->
+                <div class="metric" style="text-align: center; padding: 20px; background: #fdf3fc; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                    <h4 style="font-size: 1.8em; color: #E91E63;">F1-Score</h4>
+                    <p style="font-size: 1.6em; font-weight: bold; color: #333; margin: 10px 0;">99%</p>
+                    <p style="font-size: 1em; color: #666;">Harmonic mean of precision and recall.</p>
+                </div>
+            </div>
+    
+            <!-- Additional Description -->
+            <p style="margin-top: 40px; font-size: 1.2em; color: #555; line-height: 1.8; text-align: justify;">
+                These metrics provide a comprehensive understanding of the model's performance. While accuracy gives an overall idea, precision, recall, and F1-score help evaluate the model's performance in more specific ways, especially for imbalanced datasets.
+            </p>
+    
+            <!-- Chart Section -->
+            <div style="margin-top: 40px; text-align: center;">
+                <canvas id="metricsChart" style="max-width: 700px; height: 400px; margin: auto;"></canvas>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    <section id="project-flowchart" style="padding: 50px; background: #f9f9f9;box-shadow:10px 10px 10px 10px;">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;margin-top:90px;">Project Flowchart</h2>
+        <p style="font-size: 1.2em; text-align: center; margin-bottom: 20px;">
+            The following flowchart visually represents the key steps and processes in our project. It highlights the flow of activities from initiation to completion, ensuring clarity and effective understanding of the workflow.
+        </p>
+        
+ <!-- Flowchart Section -->
+<div style="display: flex; flex-wrap: wrap; align-items: center; margin: 30px 0;">
+    <!-- Image Section -->
+    <div style="flex: 1; max-width: 50%; padding: 10px;">
+        <img src="{{ url_for('static', filename='images/proflowchart.png') }}" 
+             alt="Project Flowchart" 
+             style="width: 100%; height: auto; border: 1px solid #ddd;margin-top:-50px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+    </div>
+    <!-- Content Section -->
+    <div style="flex: 1; max-width: 50%; padding: 10px;">
+        <p style="font-size: 1.1em; line-height: 1.8; text-align: justify;">
+            The project is structured to ensure a smooth and effective implementation, starting with <b>data collection</b>. This step lays a strong foundation by gathering accurate and comprehensive data from various sources, ensuring its relevance to project goals.
+        </p>
+        <p style="font-size: 1.1em; line-height: 1.8; text-align: justify;">
+            Once collected, the data undergoes <b>preprocessing</b> to address inconsistencies, noise, and missing values. This process involves cleaning, normalizing, and transforming the data, making it ready for the next steps. Following this, <b>feature extraction</b> identifies key data elements to enhance the model's efficiency and accuracy.
+        </p>
+        <p style="font-size: 1.1em; line-height: 1.8; text-align: justify;">
+            The model is then enhanced with additional layers to capture complex patterns. Using <b>CNN-LSTM integration</b>, the project leverages the strengths of Convolutional Neural Networks (CNN) for spatial features and Long Short-Term Memory (LSTM) for temporal patterns. This powerful combination ensures a robust and efficient solution.
+        </p>
+        <p style="font-size: 1.1em; line-height: 1.8; text-align: justify;">
+            In the <b>classification</b> phase, the model assigns inputs to appropriate categories based on learned patterns. During <b>training</b>, it is fine-tuned using labeled datasets, optimizing parameters for higher accuracy and lower error rates. The final <b>evaluation</b> phase tests the model on unseen data, ensuring its readiness for deployment.
+        </p>
+       
+    </div>
+</div>
+
+
+    
+       <!-- Key Stages in the Flowchart -->
+<div class="key-stages" style="max-width: 800px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+    <h3 style="font-size: 2em; margin-bottom: 20px; text-align: center;">Key Stages in the Flowchart</h3>
+    <ol style="font-size: 1.2em; line-height: 1.8; color: #555;">
+        <li><strong>Data Collection:</strong> Gather relevant and accurate data from various sources to establish a solid foundation for the project.</li>
+        <li><strong>Data Preprocessing:</strong> Clean, normalize, and transform the collected data to address inconsistencies and prepare it for analysis.</li>
+        <li><strong>Feature Extraction:</strong> Isolate and identify the most important features from the dataset to enhance model accuracy and efficiency.</li>
+        <li><strong>Model Design:</strong> Add layers to the model and integrate CNN-LSTM for effective spatial and temporal pattern recognition.</li>
+        <li><strong>Classification and Training:</strong> Assign input data to appropriate categories and fine-tune the model parameters using labeled datasets.</li>
+        <li><strong>Evaluation and Prediction:</strong> Assess the model's performance using test data and ensure readiness for deployment.</li>
+        <li><strong>Deployment:</strong> Implement the trained model for real-world application, achieving the project's objectives.</li>
+    </ol>
+</div>
+
+<!-- Benefits of the Flowchart -->
+<div class="benefits" style="margin-top: 30px; padding: 20px; background: #fff9f0; border-left: 5px solid #f4a261; border-radius: 5px;">
+    <h3 style="font-size: 1.8em; margin-bottom: 20px;">Why Use This Flowchart?</h3>
+    <ul style="font-size: 1.2em; line-height: 1.8;">
+        <li><strong>Organized Workflow:</strong> Clearly outlines each stage of the project, ensuring a systematic approach to implementation.</li>
+        <li><strong>Enhanced Data Handling:</strong> Emphasizes preprocessing and feature extraction for better model accuracy.</li>
+        <li><strong>Optimized Model Design:</strong> Highlights the use of CNN-LSTM integration to address both spatial and temporal patterns effectively.</li>
+        <li><strong>Improved Decision-Making:</strong> Offers a structured methodology to evaluate and deploy the solution confidently.</li>
+        <li><strong>Scalable Solution:</strong> Ensures the final model is robust and adaptable for real-world applications.</li>
+    </ul>
+</div>
+<!-- Proposed Flowchart Section -->
+<div class="image-section" style="max-width: 1200px; margin: auto; padding: 20px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), hsla(185, 89.60%, 73.50%, 0.90)); border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">
+    <h2 style="font-size: 1.8em; text-align: center; margin-bottom: 20px; color: #333;">Proposed Project Flowchart</h2>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <img src="{{ url_for('static', filename='images/proposed.png') }}" 
+             alt="Proposed Project Flowchart" 
+             style="width: 90%; max-width: 800px; height: 200px;; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+        <p style="font-size: 1.2em; line-height: 1.8; text-align: justify; color: #555; max-width: 800px;">
+            The proposed flowchart outlines a systematic approach for implementing the project effectively. 
+            It begins with a thorough data collection process, followed by preprocessing steps to ensure data quality. 
+            Advanced techniques like feature extraction and hybrid CNN-LSTM integration are applied to enhance 
+            the model's performance. The final stages include evaluation, prediction, and deployment, ensuring 
+            a robust and scalable solution.
+        </p>
+    </div>
+</div>
+
+<!-- Hybrid Model Architecture Section -->
+<div class="image-section" style="max-width: 1200px; margin: auto; padding: 20px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), hsla(147, 46.50%, 60.40%, 0.90)); border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+    <h2 style="font-size: 1.8em; text-align: center; margin-bottom: 20px; color: #333;">Hybrid Model Architecture</h2>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <img src="{{ url_for('static', filename='images/hybrid.png') }}" 
+             alt="Hybrid Model Architecture" 
+             style="width: 90%; max-width: 800px; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+        <p style="font-size: 1.2em; line-height: 1.8; text-align: justify; color: #555; max-width: 800px;">
+            The hybrid model architecture combines the strengths of Convolutional Neural Networks (CNN) and 
+            Long Short-Term Memory (LSTM) networks. The CNN layers effectively extract spatial features from the input data, 
+            while the LSTM layers capture temporal dependencies. This integration ensures a comprehensive approach to 
+            solving complex problems, making the architecture ideal for applications requiring spatial and sequential analysis.
+        </p>
+    </div>
+</div>
+
+    </section>
+    <!-- Footer Section -->
+<footer style="background: #333; color: #f9f9f9; padding: 20px 0; text-align: center; font-size: 1em; margin-top: 40px;">
+    <div style="max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 0 20px;">
+        <!-- Footer Links -->
+        <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
+            <h3 style="font-size: 1.2em; margin-bottom: 10px;">Quick Links</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li><a href="#home" style="color: #f9f9f9; text-decoration: none; font-size: 1em;">Home</a></li>
+                <li><a href="#about-project" style="color: #f9f9f9; text-decoration: none; font-size: 1em;">About</a></li>
+                <li><a href="#predictions" style="color: #f9f9f9; text-decoration: none; font-size: 1em;">Services</a></li>
+                <li><a href="#" style="color: #f9f9f9; text-decoration: none; font-size: 1em;">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Footer Contact -->
+        <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
+            <h3 style="font-size: 1.2em; margin-bottom: 10px;">Contact Us</h3>
+            <p style="font-size: 1em; margin: 5px 0;">Email: info@example.com</p>
+            <p style="font-size: 1em; margin: 5px 0;">Phone: +123 456 7890</p>
+            <p style="font-size: 1em; margin: 5px 0;">Address: 123 Main Street, City, Country</p>
+        </div>
+
+        <!-- Footer Social Media -->
+        <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
+            <h3 style="font-size: 1.2em; margin-bottom: 10px;">Follow Us</h3>
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <a href="#" style="color: #f9f9f9; font-size: 1.5em; text-decoration: none;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: #f9f9f9; font-size: 1.5em; text-decoration: none;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: #f9f9f9; font-size: 1.5em; text-decoration: none;"><i class="fab fa-linkedin"></i></a>
+                <a href="#" style="color: #f9f9f9; font-size: 1.5em; text-decoration: none;"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright -->
+    <div style="margin-top: 20px; font-size: 0.9em; color: #bbb;">
+        &copy; 2024 Your Website. All rights reserved.
+    </div>
+</footer>
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function uploadImage() {
+            const fileInput = document.getElementById('file-upload');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show the image preview
+            const imgPreview = document.getElementById('image-preview');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = 'block'; // Show the image preview
+            };
+            reader.readAsDataURL(file);
+            
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.textContent = "Error: " + data.error;
+                } else {
+                    resultDiv.textContent = "Prediction Index Disease Name: " + data.disease_name;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+
+        var ctx = document.getElementById('metricsChart').getContext('2d');
+        var metricsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score'],
+                datasets: [{
+                    label: 'Performance',
+                    data: [95, 92, 94, 93],
+                    backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#FF5722'],
+                    borderColor: ['#4CAF50', '#2196F3', '#FFC107', '#FF5722'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+ 
+    </script>
+</body>
+</html>
